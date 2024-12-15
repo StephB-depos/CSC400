@@ -1,0 +1,154 @@
+// scanner so we can get user input
+import java.util.Scanner;
+
+public class Main {
+	// our main squeeze
+	public static void main(String[] args) {
+		// create our bag instance which will extend the inventory class
+		Inventory<String> hospitalInventory = new Bag<>();
+		// create our scanner object to read in user input
+		Scanner scanner = new Scanner(System.in);
+		
+		// Main loop for our cool user menu
+		boolean exit = false;  // control variable to exit loop
+		while(!exit) {
+			// display the menu
+			System.out.println("\n User Menu:");
+			System.out.println("1. Add Item to Inventory");
+			System.out.println("2. Remove Item from Inventory");
+			System.out.println("3. Find Item");
+			System.out.println("4. Quantity of Item in Inventory");
+			System.out.println("5. View Inventory");
+			System.out.println("6. Exit");
+			
+			// Have our user choose
+			System.out.println("Choose an option(1-6): ");
+			// create variable to store the choice
+			int choice = 0; 
+			
+			// validate the choice input to ensure its valid
+			try {
+				// try to parse the input as an int
+				choice = Integer.parseInt(scanner.nextLine());
+			} catch(NumberFormatException e) {
+				System.out.println("ERROR: Invalid choice. Enter a number between 1 and 6.");
+				// restart loop if invalid input
+				continue;
+			}
+			
+			// let use a case/switch to handle the users choice
+			switch(choice) {
+			case 1:
+				// add item to inventory
+				System.out.println("Enter the name of the item to add: ");
+				// read item from user
+				String addItem = scanner.nextLine();
+				// make sure its not empty
+				if(!addItem.isEmpty()) {
+					// add item to inventory
+					hospitalInventory.add(addItem);
+					// show it was added successfully
+					System.out.println("Success! " + addItem + " has been added to the inventory.");
+				} else {
+					// handle empty 
+					System.out.println("Item name cannot be empty.");
+				}
+				break;
+				
+			case 2:
+				// remove item
+				if (hospitalInventory.isEmpty()) {
+					System.out.println("Inventory is empty. Cannot remove items.");
+					break;
+				}
+				//print current inventory
+				hospitalInventory.printContents();
+				//Ask user to enter the name of the item to remove
+				System.out.print("Enter the name of the item to remove: ");
+				// read in the user input
+				String removeItem = scanner.nextLine();
+				// ensure its not empty then remove the item
+				if(!removeItem.isEmpty() && hospitalInventory.contains(removeItem)) {
+					// remove item from inventory
+					hospitalInventory.remove(removeItem);
+					// show that it was done successfully
+					System.out.println("Success! " + removeItem + " has been removed from the inventory");
+				} else {
+					// print error message
+					System.out.println("ERROR: Item not found or input is not valid.");
+				}
+				break;
+				
+			case 3:
+				// check if the inventory is empty
+				if(hospitalInventory.isEmpty()) {
+					// let the user know
+					System.out.println("The inventory is empty. No items to find.");
+				} else {
+					//display current inventory before asking for item to find
+					hospitalInventory.printContents();
+					
+					// check if item is in inventory
+					System.out.print("Enter the name of the item to find: ");
+					// read in the input
+					String findItem = scanner.nextLine();
+					
+					// check if the item exists
+					if(hospitalInventory.contains(findItem)) {
+						// if it is found print out its found
+						System.out.println("Success! " + findItem + " is in the inventory.");
+					} else {
+						// not found message
+						System.out.println(findItem + " is not in the inventory.");
+					}
+				
+				}
+				break;
+				
+			case 4:
+				// check if inventory is empty
+				if(hospitalInventory.isEmpty()) {
+					// let user know
+					System.out.println("The inventory is empty. No items to check.");
+				} else {
+					// display current inventory
+					hospitalInventory.printContents();
+					
+					// count quantity of an item
+					System.out.print("Enter the name of the item to count: ");
+					// read in user input
+					String itemQuantity = scanner.nextLine();
+					// get count of the item
+					int count = hospitalInventory.count(itemQuantity);
+					// tell the user the quantity of the item
+					System.out.println("There are " + count + " " + itemQuantity + "(s) in the inventory.");
+				}
+				break;
+			
+			case 5:
+				// check if empty first
+				if(hospitalInventory.isEmpty()) {
+					// let user know
+					System.out.println("The inventory is empty. No item to check.");
+				} else {
+					// print the contents of the bag
+					hospitalInventory.printContents();
+				}
+				break;
+				
+			case 6:
+				// exit the program
+				System.out.println("Exiting the program!");
+				// IMPORTANT! set exit to true to break the loop and exit program
+				exit = true;
+				break;
+				
+			default:
+				// handle invalid choices
+				System.out.println("ERROR: Not valid choice. Please enter a number between 1 and 6.");
+			}	
+		}
+		// close our scanner so we don't leak any resources
+		scanner.close();
+	}
+}
