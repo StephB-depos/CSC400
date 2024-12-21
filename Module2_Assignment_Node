@@ -1,0 +1,16 @@
+//Each Node will store an item and the count of the item
+public class Node<T> {
+	// variable to hold the item
+	T item;
+	// variable to hold the occurrences of the item
+	int count;
+	// variable to hold the next node in our linked list
+	Node<T> next;
+	
+	// Constructor to initialize our Node with an item and initial count of 1
+	public Node(T item) {
+		this.item = item;
+		this.count = 1;
+		this.next = null;
+	}
+}
