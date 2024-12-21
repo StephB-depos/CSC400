@@ -1,0 +1,21 @@
+//Abstract class that will define the basic operations for our Bag
+public abstract class Inventory<T> {
+	// abstract methods that will be implemented by subclasses
+	public abstract void add(T item); // Adds an item to our bag
+	public abstract void remove(T item); // removes an item from the bag
+	public abstract boolean contains(T item); // Will check if an item is in a bag
+	public abstract int count(T item);  // will count how many times an item is found in a bag (occurrence of item)
+	// return total num of items in bag w/ dupes
+	public abstract int size();
+	// merge items from one bag to another
+	public abstract void merge(Bag<T> otherBag);
+	// return new bag containing only unique items from current bag
+	public abstract Bag<T> distinct();
+	// Our default method which will allow us to print out our bag of items(inventory)
+	public void printContents() {
+		System.out.println("Medical Inventory Contents: ");
+		// this can be overridden by our future subclasses!
+	}
+	// check if inventory is empty
+	public abstract boolean isEmpty();
+}
