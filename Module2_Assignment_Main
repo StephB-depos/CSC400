@@ -1,0 +1,217 @@
+//scanner so we can get user input
+import java.util.Scanner;
+
+public class Main {
+	// our main squeeze
+	public static void main(String[] args) {
+		// create our bag instance which will extend the inventory class
+		Inventory<String> hospitalInventory = new Bag<>();
+		// another bag for merging 
+		Inventory<String> hospitalInventory2 = new Bag<>();
+		
+		// create our scanner object to read in user input
+		Scanner scanner = new Scanner(System.in);
+		
+		// Main loop for our cool user menu
+		boolean exit = false;  // control variable to exit loop
+		while(!exit) {
+			// display the menu
+			System.out.println("\n User Menu:");
+			System.out.println("1. Add Item to Inventory");
+			System.out.println("2. Remove Item from Inventory");
+			System.out.println("3. Find Item");
+			System.out.println("4. Quantity of Item in Inventory");
+			System.out.println("5. View Inventory");
+			System.out.println("6. View Distint Items"); // part of module two methods
+			System.out.println("7. Size of Inventory");  // part of module two methods
+			System.out.println("8. Merge with Another Inventory"); // part of module two methods
+			System.out.println("9. Exit");
+			
+			// Have our user choose
+			System.out.println("Choose an option(1-9): "); // updated to include module two methods
+			// create variable to store the choice
+			int choice = 0; 
+			
+			// validate the choice input to ensure its valid
+			try {
+				// try to parse the input as an int
+				choice = Integer.parseInt(scanner.nextLine());
+			} catch(NumberFormatException e) {
+				System.out.println("ERROR: Invalid choice. Enter a number between 1 and 9.");
+				// restart loop if invalid input
+				continue;
+			}
+			
+			// let use a case/switch to handle the users choice
+			switch(choice) {
+			// Case 1 should let us add item to either inventory
+			case 1:
+				// ask user which inventory they want to add items to
+				System.out.println("Which inventory would you like to add the item to?");
+				System.out.println("1. Hospital Inventory 1");
+				System.out.println("2. Hospital Inventory 2");
+				int inventoryChoice = Integer.parseInt(scanner.nextLine());
+				System.out.println("Enter the name of the item to add: ");
+				String addItem = scanner.nextLine();
+				
+				// do something depending on the users choice above
+				if(inventoryChoice == 1) {
+					if(!addItem.isEmpty()) {
+						hospitalInventory.add(addItem);
+						// print of a success message for user
+						System.out.println("Success! " + addItem + " added to Hospital Inventory 1.");
+					} else {
+						System.out.println("Item could not be added. Item name cannot be empty.");
+					}
+				} else if (inventoryChoice == 2) {
+					if(!addItem.isEmpty()) {
+						// add item and give user succcess message
+						hospitalInventory2.add(addItem);
+						System.out.println("Success! " + addItem + " added to Hospital Inventory 2.");
+					} else {
+						// print error message
+						System.out.println("Item could not be added. Item name cannot be empty.");
+					}
+				} else {
+					// error message
+					System.out.println("ERROR: Invalid choice. Try again.");
+				}
+				break;
+				
+			case 2:
+				// remove item from either inventory 1 or inventory 2
+				// ask user which inventory they want to remove items from
+				System.out.println("Which inventory would you like to remove the item from?");
+				System.out.println("1. Hospital Inventory 1");
+				System.out.println("2. Hospital Inventory 2");
+				inventoryChoice = Integer.parseInt(scanner.nextLine());
+				System.out.println("Enter the name of the item to remove: ");
+				String removeItem = scanner.nextLine();
+				
+				// check if item is in inventory
+				if(inventoryChoice == 1) {
+					if(hospitalInventory.contains(removeItem)) {
+						hospitalInventory.remove(removeItem);
+						// print of a success message for user
+						System.out.println("Success! " + removeItem + " removed from Hospital Inventory 1.");
+					} else {
+						System.out.println("Item could not be removed. Item was not found in inventory.");
+					}
+				} else if (inventoryChoice == 2) {
+					if(hospitalInventory2.contains(removeItem)) {
+						// remove item and give user success message
+						hospitalInventory2.remove(removeItem);
+						System.out.println("Success! " + removeItem + " removed from Hospital Inventory 2.");
+					} else {
+						// print error message
+						System.out.println("Item could not be removed. Item was not found in inventory.");
+					}
+				} else {
+					// error message
+					System.out.println("ERROR: Invalid choice. Try again.");
+				}
+				break;
+				
+			case 3:
+				// find item in inventory 1 or inventory 2
+				// ask user which inventory they want to remove items from
+				System.out.println("Which inventory would you like to search in?");
+				System.out.println("1. Hospital Inventory 1");
+				System.out.println("2. Hospital Inventory 2");
+				inventoryChoice = Integer.parseInt(scanner.nextLine());
+				System.out.println("Enter the name of the item to find: ");
+				String findItem = scanner.nextLine();
+				
+				boolean found = false;
+				
+				// check depending on user choice
+				if(inventoryChoice == 1) {
+					if(hospitalInventory.contains(findItem)) {
+						// print success message
+						System.out.println("Success! " + findItem + " found in Hospital Inventory 1.");
+						// exit loop
+						found = true;
+					}
+				} else if (inventoryChoice == 2) {
+					if(hospitalInventory.contains(findItem)) {
+						// print success message
+						System.out.println("Success! " + findItem + " found in Hospital Inventory 2");
+						// exit loop
+						found = true;
+					}
+				} else {
+					// error
+					System.out.println("ERROR: invalid choice. Try again.");
+				}
+				// if you dont find the item in any inventory
+				if(!found) {
+					// print error
+					System.out.println("Item was not found in the selected inventory. Please add the item to inventory.");
+				}
+				// exit case
+				break;
+			case 4:
+					// count quantity of an item
+					System.out.print("Enter the name of the item to count: ");
+					// read in user input
+					String itemQuantity = scanner.nextLine();
+					// get count of the item
+					int count1 = hospitalInventory.count(itemQuantity);
+					int count2 = hospitalInventory2.count(itemQuantity);
+					// tell the user the quantity of the item
+					System.out.println("Total quanity of " + itemQuantity + " in both inventories: " + (count1 + count2));
+					break;
+			
+			case 5:
+				// ask user which inventory they want to view
+				System.out.println("Which inventory would you like to view?");
+				System.out.println("1. Hospital Inventory 1");
+				System.out.println("2. Hospital Inventory 2");
+				inventoryChoice = Integer.parseInt(scanner.nextLine());
+				
+				// depending on choice
+				if(inventoryChoice == 1) {
+					hospitalInventory.printContents();
+				} else if (inventoryChoice == 2) {
+					hospitalInventory2.printContents();
+				} else {
+					System.out.println("ERROR: Invalid choice!");
+				}
+				break;
+			// add case for three new methods
+			case 6:
+				// View our distinct items across both inventories
+				// create out two distinct bags to handle both inventories
+				Bag<String> distinctBag1 = hospitalInventory.distinct();
+				Bag<String> distinctBag2 = hospitalInventory2.distinct();
+				// merge our two distinct bags from two inventories
+				distinctBag1.merge(distinctBag2);
+				distinctBag1.printContents();
+				break;
+			case 7:
+				// view total # of items in inventory (include duplicates)
+				System.out.println("Total number of items in Inventory 1 (Includes Duplicates): " + ((Bag<String>) hospitalInventory).size());
+				System.out.println("Total number of items in Inventory 2 (Includes Duplicates): " + ((Bag<String>) hospitalInventory2).size());
+				break;
+			case 8:
+				// merge our two inventories
+				hospitalInventory.merge((Bag<String>) hospitalInventory2);
+				// message to confirm merge was done
+				System.out.println("Inventories were merged successfully!");
+				break;
+			case 9:
+				// exit the program
+				System.out.println("Exiting the program!");
+				// IMPORTANT! set exit to true to break the loop and exit program
+				exit = true;
+				break;
+				
+			default:
+				// handle invalid choices
+				System.out.println("ERROR: Not valid choice. Please enter a number between 1 and 6.");
+			}	
+		}
+		// close our scanner so we don't leak any resources
+		scanner.close();
+	}
+}
