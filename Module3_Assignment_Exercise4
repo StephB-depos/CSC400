@@ -1,0 +1,53 @@
+import java.util.Scanner;
+
+public class FindMissingInt {
+	// create our method that will find our missing integer in our array
+	public static int missingInt (int[] arr) {
+		// we will tie the length of our array to n
+		int n = arr.length;
+		
+		// calculate our expected sum of ints from 1 to n+1 using the formula: (n+1)*(n+2)/2
+		int expectedSum = (n+1) * (n+2)/ 2; // this is the sum of all numbers from 1 to n+1 and has a constant time operation: O(1)
+		// now we need something to hold the sum of elements present in the array
+		int sum = 0;
+		// we will loop through the array and sum up all the elements in it
+		for(int num : arr) { // looping through the array - linear complexity = O(n)
+			// add the current element to our sum
+			sum += num; // constant time operation per iteraton = O(1).
+		}
+		// So our missing number is going to be the difference between our "expectedSum" and the sum that is calculated
+		// if the sum is less we get our missing number 
+		return expectedSum - sum; // AKA return our missing number - constant time operation = O(1).
+	}
+	// main method to test functionality
+	public static void main(String[] args) {
+		// create our scanner to read in the user nums
+		Scanner scanner = new Scanner(System.in); // creating our scanner object is also constant time operation = O(1)
+		
+		// well define the size of our array n = 5, n+1 = 6 total nums
+		int n = 5;
+		int[] arr = new int[n]; // creating an array of size n is linear complexity = O(n)
+		
+		// now we can get our input from the user for 5 unique numbers from 1-6 for example.
+		System.out.println("Enter 5 unique numbers from 1-6(One number per line):");
+		
+		// loop through the array
+		for(int i = 0; i < n; i++) { // O(n) - looping through to read user input
+			// read each number from the user 
+			arr[i] = scanner.nextInt(); // read an integer is constant time operation = O(1)
+		}
+		// output the missing number
+		System.out.println("The missing number is: " + missingInt(arr)); // time to compute missing num = O(n) = LC
+		
+		// close our scanner to avoid resource leaks
+		scanner.close(); // O(1) - closing scanner resource
+	}
+}
+/* 
+ 	Program has a time and space complexity of O(n) 
+ 	- as the size of the input array grows the time and space required
+ 	  for the program will grow linearly
+ 	- O(n) for the loops
+ 	- O(1) for the other operations
+ 	- hence total time complexity is O(n)
+ */
