@@ -1,0 +1,147 @@
+import java.util.*;
+import java.io.*;
+
+public class PostfixCalculator {
+
+    // Method to evaluate postfix expression
+    public int evaluatePostfix(String postfixExpression) {
+    	// add our stack to hold operands
+        Stack<Integer> stack = new Stack<>();
+        // split the input expressions into tokens 
+        String[] tokens = postfixExpression.split("\\s+");
+        // iterate through each token 
+        for (String token : tokens) {
+        	// if the token is numeric
+            if (isNumeric(token)) {
+            	// convert it into an integer and push into the stack
+                stack.push(Integer.parseInt(token));
+            // if the token is an operator, check if there is enough operands in the stack
+            } else if (isOperator(token.charAt(0))) {
+            	// check if there are fewer than 2 operands (invalid postfix expression)
+                if (stack.size() < 2) {
+                	// print out error message
+                    System.out.println("\nERROR: Invalid Postfix Expression.");
+                    return -1; // return error
+                }
+                // pop the top two operands from the stack
+                int b = stack.pop();
+                int a = stack.pop();
+                // apply the operator on the operands and push the result back onto the stack
+                int result = applyOperator(a, b, token.charAt(0));
+                // if division by 0, return error
+                if (result == Integer.MIN_VALUE) return -1;
+                stack.push(result);
+            } else {
+            	// error message
+                System.out.println("\nERROR: Invalid character in expression: " + token);
+                return -1;
+            }
+        }
+        // if we have exactly 1 element left in the stack, return the result
+        if (stack.size() == 1) {
+            return stack.pop();
+        // else print an error
+        } else {
+            System.out.println("\nERROR: Invalid postfix expression");
+            return -1;
+        }
+    }
+
+    // Method to check if a string is numeric (valid operand)
+    private boolean isNumeric(String str) {
+    	// try to convert the string to an int
+        try {
+            Integer.parseInt(str);
+            return true; // if successful, string is numeric
+        } catch (NumberFormatException e) { // if exception occurs, string is not numeric
+            return false;
+        }
+    }
+
+    // Method to apply an operator on two operands
+    private int applyOperator(int a, int b, char operator) {
+        switch (operator) {
+            case '+': return a + b; // addition
+            case '-': return a - b; // subtraction
+            case '*': return a * b; // multiplication
+            case '/': // division w/ zero check
+                if (b == 0) {
+                    System.out.println("\nERROR: Division by zero!");
+                    return Integer.MIN_VALUE;  // Error condition if division by 0
+                } else {
+                    return a / b; // perform division
+                }
+            case '%': // modulo w/ zero check
+                if (b == 0) {
+                    System.out.println("\nERROR: Division by zero!");
+                    return Integer.MIN_VALUE;  // Error condition if division by 0
+                } else {
+                    return a % b; // perform modulo
+                }
+            default:
+                System.out.println("\nERROR: Unsupported operator!");
+                return Integer.MIN_VALUE; // return error if unsupported operator is found
+        }
+    }
+
+    // Method to check if a character is an operator
+    private boolean isOperator(char ch) {
+    	// check if char is one of the "supported" operators
+        return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%';
+    }
+
+    // Method to read and evaluate expressions from a file
+    public void evaluateFile(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            // read each line from the file
+            while ((line = reader.readLine()) != null) {
+            	// trim any leading/trailing whitespaces
+                String expression = line.trim();
+                // print out the expression be evaluated in the file
+                System.out.println("Evaluating expression: " + expression);
+                // evaluate the postfix expression and print the result
+                int result = evaluatePostfix(expression);
+                if (result != -1) {
+                    System.out.println("Result: " + result);
+                }
+            }
+        } catch (IOException e) {
+        	// handle file I/O errors
+            System.out.println("ERROR: File not found or unable to read!");
+        }
+    }
+
+    // Main method to test the program
+    public static void main(String[] args) {
+    	// create an instance of our postfixcalculator
+        PostfixCalculator calculator = new PostfixCalculator();
+
+        // Example 1: Valid Expression
+        String expression1 = "4 2 * 3 +";
+        System.out.println("Result 1: " + calculator.evaluatePostfix(expression1));
+
+        // Example 2: Valid Expression
+        String expression2 = "5 3 + 7 *";
+        System.out.println("Result 2: " + calculator.evaluatePostfix(expression2));
+
+        // Example 3: Invalid Expression (Missing operand)
+        String expression3 = "4 2 * +";
+        System.out.println("Result 3: " + calculator.evaluatePostfix(expression3));
+
+        // Example 4: Invalid Expression (Invalid character)
+        String expression4 = "4 2 @ 3 +";
+        System.out.println("Result 4: " + calculator.evaluatePostfix(expression4));
+
+        // Example 5: Valid Expression (Multi-digit numbers)
+        String expression5 = "100 9000 + 90 *";
+        System.out.println("Result 5: " + calculator.evaluatePostfix(expression5));
+
+        // Example 6: Invalid Expression with Division by Zero
+        String expression6 = "42 0 /";
+        System.out.println("Result 6: " + calculator.evaluatePostfix(expression6));
+
+        // Optional: Evaluate expressions from a file (uncomment to test)
+        // calculator.evaluateFile("expressions.txt");
+    }
+}
