@@ -1,0 +1,32 @@
+import java.util.Arrays;
+
+public class Test {
+	// main method the entry point of the program
+	public static void main(String[] args) {
+		// our defined array with our strings to be sorted
+		String[] arr = {"joke","book", "dig", "desk", "word", "fish", "ward", "dish", "wit", "deed", "fast", "dog"};
+		// print out unsorted array
+		System.out.println("Array before sorting: " + Arrays.toString(arr));
+		// call our radix sort method from the RadixSortProject class
+		RadixSortProject.radixSort(arr);
+		// print out sorted array list
+		System.out.println("Array after sorting: " + Arrays.toString(arr));
+		// show the step by step process of sorting
+		System.out.println("\nStep-by-step sorting process:");
+		stepByStepRadixSort(arr.clone()); // clone the array to preserve the OG array
+	}
+	// our method to show the step by step Radix sorting
+	private static void stepByStepRadixSort(String[] arr) {
+		// get the max length of any string in the array to determine the # of passed needed
+		int maxLength = RadixSortProject.getMaxLength(arr);
+		// loop through each char position starting from the least significant digit
+		for(int i = maxLength - 1; i >= 0; i--) {
+			// print the current step by showing which char position is being sorted
+			System.out.println("\nSorting by position " + i + ": ");
+			// call our counting sort method in our RadixSortProject class to sort the array based on current char position
+			RadixSortProject.countingSort(arr, i);
+			// print array after sorting by current char position
+			System.out.println(Arrays.toString(arr));
+		}
+	}
+}
