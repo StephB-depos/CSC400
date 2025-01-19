@@ -1,0 +1,80 @@
+public class RadixSortProject {
+	// our method which will perform the radix sort on an array of strings
+	public static void radixSort(String[] arr) {
+		// first check if the array is null or empty and return if it is 
+		if (arr == null || arr.length == 0) return;
+		// find the maximum Length of the strings in the array
+		int maxLength = getMaxLength(arr);
+		
+		// perform counting sort for every char right to left
+		for (int i = maxLength -1; i >= 0; i--) {
+			// sort based on the current char position
+			countingSort(arr, i);
+		}
+	}
+	// our method to get the max length of the strings in the array
+	public static int getMaxLength(String[] arr) {
+		// initialize our variable 'max' which will hold the max string length
+		int max = 0;
+		// iterate through each string 's' in the array
+		for (String s: arr) {
+			// if the length of the string is greater than what's in max
+			if (s.length() > max) {
+				// update the max length with the current string
+				max = s.length();
+			}
+		}
+		// return the maximum length found in the array
+		return max;
+	}
+	// our method for counting sort to sort the strings based on the char position
+	public static void countingSort(String [] arr, int position) {
+		// assuming ASCII char, 256 possible values
+		final int alphabetSize = 256; // assuming ASCII char
+		// store the count of characters in a new array called count
+		int[] count = new int[alphabetSize];
+		// array output to hold our sorted strings
+		String[] output = new String[arr.length];
+		
+		// count occurrences of char at a specified position in each string
+		for (String s : arr) {
+			// if the string's length is greater than the current position, use that character
+			// if its not, use the default value of 0 
+			int index = position < s.length() ? s.charAt(position) : 0;
+			// increment the count for the corresponding character
+			count[index]++;
+		}
+		
+		// calculate the cumulative count to determine the position of each string
+		for (int i = 1; i < alphabetSize; i++) {
+			// add previous count to current count
+			count[i] += count[i-1];
+		}
+		
+		// build an output array by placing given strings in sorted order
+		for (int i = arr.length - 1; i >= 0; i --) {
+			// if the strings length is greater than the current position, use that character
+			// if not use the default value 0 
+			int index = position < arr[i].length() ? arr[i].charAt(position) : 0;
+			// place the string in the correct position
+			output[count[index] - 1] = arr[i];
+			// then decrement the count for the used character
+			count[index]--;
+		}
+		// copy output array (sorted strings) to original array 
+		System.arraycopy(output, 0, arr, 0, arr.length);
+	}
+}
+//// Big O Analysis:
+
+//Time Complexity:
+//Finding max length: O(n), where n is the number of strings
+//Counting sort: O(n + k) for each iteration, where k is the alphabet size (256 in this case)
+//We perform counting sort w times, where w is the length of the longest string
+//Therefore, the overall time complexity is O(w * (n + k)). 
+//Since k is a constant (256), we can simplify it to O(w * n).
+
+//Space Complexity:
+// The space complexity of Radix Sort is O(n), 
+// because the extra arrays (like output[] and count[]) require O(n + k) space
+// and since k is constant, this simplifies to O(n)
