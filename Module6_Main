@@ -1,0 +1,50 @@
+
+import java.io.IOException;
+import java.util.Iterator;
+
+//Main class to demonstrate the CustomLinkedList functionality
+public class Main { 
+    public static void main(String[] args) { // Main method
+        CustomLinkedList linkedList = new CustomLinkedList(); // Create a new CustomLinkedList
+
+        // Insert some elements
+        linkedList.insert(31); // Insert 31
+        linkedList.insert(27); // Insert 27
+        linkedList.insert(10); // Insert 10
+        linkedList.insert(23); // Insert 23
+        linkedList.insert(58); // Insert 58
+
+        // Iterate and display elements
+        System.out.println("List after insertion: "); // Print message
+        Iterator<Integer> iterator = linkedList.iterator(); // Get an iterator for the list
+        while (iterator.hasNext()) { // While there are more elements
+            System.out.print(iterator.next() + " "); // Print each element
+        }
+        System.out.println(); // Print a new line
+        
+        // Example for deleting an element from file
+        System.out.println("Deleting element 23 from list..."); // Print message
+        linkedList.delete(23); // Delete element 23 from the list
+        
+        // print list after deleting element
+        System.out.println("List after deletion of element: "); // Print message
+        iterator = linkedList.iterator(); // Get a new iterator
+        while (iterator.hasNext()) { // While there are more elements
+            System.out.print(iterator.next() + " "); // Print each element
+        }
+        System.out.println(); // Print a new line
+        // reading from a file and inserting values
+        String filename = "FileName.txt"; // Define the filename
+        try {
+            linkedList.readFile(filename); // Read integers from the file and insert into the list
+            System.out.println("List after reading from file: " + filename); // Print message
+            iterator = linkedList.iterator(); // Get a new iterator
+            while (iterator.hasNext()) { // While there are more elements
+                System.out.print(iterator.next() + " "); // Print each element
+            }
+            System.out.println(); // Print a new line
+        } catch (IOException e) { // If an IOException occurs
+            System.err.println("Error reading from file " + filename + ": " + e.getMessage()); // Print error message
+        }
+    }
+}
