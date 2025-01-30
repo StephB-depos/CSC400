@@ -1,0 +1,95 @@
+import java.io.*; // Importing all classes from java.io package
+import java.util.*; // Importing all classes from java.util package
+
+public class CustomLinkedList { // Defining a custom linked list class
+    private Node head; // Declaring the head node of the linked list
+    
+    public CustomLinkedList() { // Constructor for the CustomLinkedList class
+        head = null; // Initializing the head to null (empty list)
+    }
+    //method for insert w/ a new node
+    public void insert(int data) { // Method to insert a new node with given data
+        Node newNode = new Node(data); // Creating a new node with the given data
+        if (head == null) { // If the list is empty
+            head = newNode; // Set the new node as the head
+        } else { // If the list is not empty
+            Node current = head; // Start from the head
+            while (current.next != null) { // Traverse to the last node
+                current = current.next; // Move to the next node
+            }
+            current.next = newNode; // Set the new node as the next of the last node
+        }
+    }
+    // method for delete
+    public boolean delete(int data) { // Method to delete a node with given data
+        if (head == null) { // If the list is empty
+            // if the list is empty there is nothing to delete
+            return false; // Return false as deletion is not possible
+        }
+        // if the node to delete is the head
+        if (head.data == data) { // If the head node contains the data to be deleted
+            // move head pointer to the next node
+            head = head.next; // Set the next node as the new head
+            return true; // Return true as deletion is successful
+        }
+        Node current = head; // Start from the head
+        while (current.next != null) { // Traverse the list
+            if (current.next.data == data) { // If the next node contains the data to be deleted
+                // skip the node to delete
+                current.next = current.next.next; // Skip the next node (delete it)
+                return true; // Return true as deletion is successful
+            }
+            current = current.next; // Move to the next node
+        }
+        // data not found
+        return false; // Return false as data was not found in the list
+    }
+
+    public Iterator<Integer> iterator() { // Method to return an iterator for the list
+        return new LinkedListIterator(); // Return a new instance of LinkedListIterator
+    }
+
+    private class Node { // Private inner class representing a node in the linked list
+        int data; // Data stored in the node
+        Node next; // Reference to the next node
+
+        Node(int data) { // Constructor for the Node class
+            this.data = data; // Initialize the data
+            this.next = null; // Initialize the next reference to null
+        }
+    }
+
+    private class LinkedListIterator implements Iterator<Integer> { // Private inner class implementing Iterator
+        private Node current = head; // Current node, initialized to the head
+
+        @Override
+        public boolean hasNext() { // Method to check if there are more elements
+            return current != null; // Return true if current node is not null
+        }
+
+        @Override
+        public Integer next() { // Method to get the next element
+            if (!hasNext()) { // If there are no more elements
+                throw new NoSuchElementException(); // Throw an exception
+            }
+            int data = current.data; // Get the data from the current node
+            current = current.next; // Move to the next node
+            return data; // Return the data
+        }
+    }
+
+    // method to read integers from a file and populate linked list
+    public void readFile(String filename) throws IOException { // Method to read integers from a file
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) { // Create a BufferedReader
+            String line; // Variable to store each line read from the file
+            while ((line = reader.readLine()) != null) { // Read each line until the end of file
+                try {
+                    int value = Integer.parseInt(line.trim()); // Parse the line as an integer
+                    insert(value); // Insert the parsed value into the linked list
+                } catch (NumberFormatException e) { // If parsing fails
+                    System.err.println("Invalid integer found in file: " + line); // Print error message
+                }
+            }
+        }
+    }
+}
